@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Générateur de feuilles pour macarons</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+      }
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      img {
+        max-height: 150px;
+        margin: 10px auto;
+      }
+      button {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      input[type="file"] {
+        margin-bottom: 20px;
+      }
+      #cropper-container {
+        display: inline-block;
+        margin: 20px auto;
+        max-width: 400px;
+        max-height: 400px;
+        overflow: hidden;
+      }
+    </style>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  </head>
+  <body>
+    <h1>Générateur de feuilles pour macarons</h1>
+    <input type="file" accept="image/*" id="imageUpload" />
+    <div id="preview"></div>
+    <button onclick="cropImage()">Rogner l'image</button>
+    <button onclick="generatePDF()">Générer le PDF</button>
+
+    <script>
+      let imageData = null;
+      let cropper = null;
+
+      document.getElementById("imageUpload").addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            imageData = event.target.result;
+            const img = document.createElement("img");
+            img.id = "imageToCrop";
+            img.src = imageData;
+            document.getElementById("preview").innerHTML = "";
+            document.getElementById("preview").appendChild(img);
+            if (cropper) cropper.destroy();
+            cropper = new Cropper(img, {
+              aspectRatio: 1,
+              viewMode: 1,
+              autoCropArea: 1.0,
+              scalable: true,
+              zoomable: true,
+              center: true,
+              background: false,
+              guides: true,
+              highlight: true,
+              cropBoxResizable: true,
+              cropBoxMovable: true,
+            });
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      function cropImage() {
+        if (cropper) {
+          const canvas = cropper.getCroppedCanvas({
+            width: 450,
+            height: 450,
+            imageSmoothingQuality: "high",
+          });
+          imageData = canvas.toDataURL("image/png");
+          const img = document.createElement("img");
+          img.src = imageData;
+          document.getElementById("preview").innerHTML = "";
+          document.getElementById("preview").appendChild(img);
+        }
+      }
+
+      function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ unit: "cm", format: "letter" });
+        const imageSize = 3.18;
+        const spacing = 0.28;
+        const rows = 8;
+        const cols = 6;
+        const totalWidth = cols * imageSize + (cols - 1) * spacing;
+        const totalHeight = rows * imageSize + (rows - 1) * spacing;
+        const marginX = (21.59 - totalWidth) / 2;
+        const marginY = (27.94 - totalHeight) / 2;
+        let x = marginX;
+        let y = marginY;
+
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < cols; col++) {
+            if (imageData) {
+              doc.addImage(imageData, "PNG", x, y, imageSize, imageSize);
+            }
+            x += imageSize + spacing;
+          }
+          x = marginX;
+          y += imageSize + spacing;
+        }
+
+        doc.save("macarons.pdf");
+      }
+    </script>
+  </body>
+</html>
