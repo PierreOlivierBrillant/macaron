@@ -20,7 +20,7 @@ jobs:
       - name: Téléverser l'artéfact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./
+          path: ./site
       - name: Déploiement
         id: deployment
         uses: actions/deploy-pages@v4

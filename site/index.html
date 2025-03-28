@@ -2,7 +2,8 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>Générateur de Macarons</title>
+    <title>Macarons</title>
+    <link rel="icon" type="image/x-icon" href="static/img/favicon.png" />
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
       rel="stylesheet"
@@ -10,9 +11,9 @@
     <link href="style.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="branding">
-      <img src="static/ouiquebec.png" alt="Logo" height="150px" />
-      <h1>Générateur de Macarons</h1>
+    <div class="branding-container">
+      <img src="static/img/ouiquebec.png" alt="Logo" height="150px" />
+      <h1>Générateur de macarons</h1>
       <p>Créez vos macarons personnalisés en quelques étapes simples.</p>
     </div>
 
@@ -28,7 +29,7 @@
         </div>
         <div class="step" data-step="3">
           <div class="step-number">3</div>
-          <span>Génération PDF</span>
+          <span>Générer le PDF</span>
         </div>
       </div>
 
@@ -73,23 +74,13 @@
           Vérifiez la prévisualisation avant de générer
         </div>
 
-        <div class="preview-note">
-          <div>Prévisualisation (échelle réduite) :</div>
-          <div class="scale-info">1 pixel ≈ 0.5mm</div>
-        </div>
         <div class="preview-grid" id="previewGrid"></div>
-
-        <div class="preview-box">
-          <div>Format final : 3.18cm × 3.18cm</div>
-          <div>Disposition : 6 colonnes × 8 lignes</div>
-          <div>Espacement : 0.28cm</div>
-        </div>
 
         <div class="button-group">
           <button class="secondary" onclick="previousStep()">
             ← Précédent
           </button>
-          <button onclick="generatePDF()">Générer PDF</button>
+          <button onclick="generatePDF()">Télécharger</button>
         </div>
       </div>
     </div>

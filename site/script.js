@@ -110,8 +110,9 @@ function handleImage(file) {
     preview.src = uploadedImage;
     preview.style.display = "block";
 
-    // Activer le bouton suivant
+    // Activer le bouton suivant ET passer à l'étape 2 automatiquement
     document.getElementById("nextStep1").disabled = false;
+    nextStep();
   };
   reader.readAsDataURL(file);
 }
